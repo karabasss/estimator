@@ -1,4 +1,6 @@
 from HTMLParser import HTMLParser
+from urllib2 import urlopen
+from bs4 import BeautifulSoup    ## need to install # pip install beautifulsoup4
 
 link="https://www.numbeo.com/cost-of-living/city-estimator/in/{city}?displayCurrency=EUR" \
 "&members=4&restaurants_percentage=10.0&inexpensive_restaurants_percentage=50.0" \
@@ -17,5 +19,9 @@ cities = [ 'Tallinn', 'Kiev', 'New-York', 'Helsinki' ]
 #parser = MyHTMLParser()
 
 for city in cities:
-    print city
-    print link.format(city=city)
+    #print city
+    #print link.format(city=city)
+    url = link.format(city=city)
+    soup = BeautifulSoup(urlopen(url))
+
+    print soup
