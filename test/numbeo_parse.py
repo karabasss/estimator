@@ -1,4 +1,3 @@
-from HTMLParser import HTMLParser
 from urllib2 import urlopen
 from bs4 import BeautifulSoup    ## need to install # pip install beautifulsoup4
 
@@ -16,12 +15,10 @@ link="https://www.numbeo.com/cost-of-living/city-estimator/in/{city}?displayCurr
 
 cities = [ 'Tallinn', 'Kiev', 'New-York', 'Helsinki' ]
 
-#parser = MyHTMLParser()
-
 for city in cities:
-    #print city
-    #print link.format(city=city)
     url = link.format(city=city)
-    soup = BeautifulSoup(urlopen(url))
+    soup = BeautifulSoup(urlopen(url).read(), "html.parser")
+    monthly_spending = soup.find_all("th", {"class": "th_no_highlight_a_right"})
+    print "Monthly spending in " + city + " = " + monthly_spending[-1].text.split()[0] + " euro."
 
-    print soup
+
