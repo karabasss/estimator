@@ -1,4 +1,7 @@
-from urllib2 import urlopen
+try:
+    from urllib2 import urlopen
+except ImportError:
+    from urllib.request import urlopen
 from bs4 import BeautifulSoup    ## need to install # pip install beautifulsoup4
 
 link="https://www.numbeo.com/cost-of-living/city-estimator/in/{city}?displayCurrency=EUR" \
@@ -13,12 +16,12 @@ link="https://www.numbeo.com/cost-of-living/city-estimator/in/{city}?displayCurr
 "&paying_for_public_transport=Monthly%2C+All+Members&sport_memberships=100.0" \
 "&vacation=0.0&clothing_and_shoes=50.0&rent=26"
 
-cities = [ 'Tallinn', 'Kiev', 'New-York', 'Helsinki' ]
+cities = ['Tallinn', 'Kiev', 'New-York', 'Helsinki']
 
 for city in cities:
     url = link.format(city=city)
     soup = BeautifulSoup(urlopen(url).read(), "html.parser")
     monthly_spending = soup.find_all("th", {"class": "th_no_highlight_a_right"})
-    print "Monthly spending in " + city + " = " + monthly_spending[-1].text.split()[0] + " euro."
+    print ("Monthly spending in " + city + " = " + monthly_spending[-1].text.split()[0] + " euro.")
 
 
