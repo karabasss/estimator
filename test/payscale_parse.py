@@ -18,7 +18,8 @@ for city in cities:
     #print link.format(city=city['city'],country=city['country'],code=city['ps_code'])
     url = link.format(city=city['city'],country=city['country'],code=city['ps_code'])
     soup = BeautifulSoup(urlopen(url).read(), "html.parser")
-    yearly_salary = soup.find("div", {"class": "narrative-text summary"})
+    yearly_salary = soup.find("div", {"class": "narrative-text summary"}).text
     #print ("The average pay for a software developer in " + city['city'] + " = " + yearly_salary[-1].text.split()[0] + " dollars")
-    print re.search(r'^.*\s(.*\d+,\d+)\s', yearly_salary.text).group(0)
+    sal = re.search(r'.*\s(.*\d+,\d+).*', 'A Software Developer in New York, New York earns an average salary of $86,104')
+    print (sal.group(1))
     #print (yearly_salary.text)
