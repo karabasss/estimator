@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup    ## need to install # pip install beautifulsoup4
 import re
 
 link = "https://www.payscale.com/research/{country}/Job=Software_Developer/Salary/{code}/{city}"
-
+salaries = []
 cities = [
     {'city': 'Tallinn', 'country': 'EE', 'ps_code': '75b81c34'},
     {'city': 'Kiev', 'country': 'UA', 'ps_code': '221d38a6'},
@@ -18,8 +18,15 @@ for city in cities:
     #print link.format(city=city['city'],country=city['country'],code=city['ps_code'])
     url = link.format(city=city['city'],country=city['country'],code=city['ps_code'])
     soup = BeautifulSoup(urlopen(url).read(), "html.parser")
-    yearly_salary = soup.find("div", {"class": "narrative-text summary"}).text
-    #print ("The average pay for a software developer in " + city['city'] + " = " + yearly_salary[-1].text.split()[0] + " dollars")
-    sal = re.search(r'.*\s(.*\d+,\d+).*', 'A Software Developer in New York, New York earns an average salary of $86,104')
-    print (sal.group(1))
-    #print (yearly_salary.text)
+    yearly_salary = soup.find("div", {"class": "narrative-text summary"}).text.strip()
+    sal = (re.search(r'.*\s(.*\d+,\d+).*', yearly_salary).group(1))
+    if sal[0] == '$':
+        salaries.append({'city': city['city'], 'currency': 'dollar', 'salary': int(sal[1:].replace(',', ''))})
+    elif sal[0] == u'\u20AC':
+        salaries.append({'city': city['city'], 'currency': 'euro', 'salary':int(sal[1:].replace(',', ''))})
+    else:
+        print "Strange currency! Skipping {city} ...".format(city=city['city'])
+
+for city in salaries:
+    print "Average salary in {city} = {salary} {currency}s".format(city=city['city'],salary=city['salary'],currency=city['currency'])
+
