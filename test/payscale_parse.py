@@ -15,7 +15,6 @@ cities = [
 ]
 
 for city in cities:
-    #print link.format(city=city['city'],country=city['country'],code=city['ps_code'])
     url = link.format(city=city['city'],country=city['country'],code=city['ps_code'])
     soup = BeautifulSoup(urlopen(url).read(), "html.parser")
     yearly_salary = soup.find("div", {"class": "narrative-text summary"}).text.strip()
@@ -23,10 +22,11 @@ for city in cities:
     if sal[0] == '$':
         salaries.append({'city': city['city'], 'currency': 'dollar', 'salary': int(sal[1:].replace(',', ''))})
     elif sal[0] == u'\u20AC':
-        salaries.append({'city': city['city'], 'currency': 'euro', 'salary':int(sal[1:].replace(',', ''))})
+        salaries.append({'city': city['city'], 'currency': 'euro', 'salary': int(sal[1:].replace(',', ''))})
     else:
-        print "Strange currency! Skipping {city} ...".format(city=city['city'])
+        print ("Strange currency! Skipping {city} ...".format(city=city['city']))
 
 for city in salaries:
-    print "Average salary in {city} = {salary} {currency}s".format(city=city['city'],salary=city['salary'],currency=city['currency'])
+    print ("Average salary of middle software developer in {city} = {salary} "
+           "{currency}s".format(city=city['city'],salary=city['salary'],currency=city['currency']))
 
