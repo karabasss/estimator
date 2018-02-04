@@ -17,8 +17,8 @@ cities = [
 for city in cities:
     url = link.format(city=city['city'],country=city['country'],code=city['ps_code'])
     soup = BeautifulSoup(urlopen(url).read(), "html.parser")
-    yearly_salary = soup.find("div", {"class": "narrative-text summary"}).text.strip()
-    sal = (re.search(r'.*\s(.*\d+,\d+).*', yearly_salary).group(1))
+    yearly_salary = soup.find("div", {"class": "you_label"}).text.strip()
+    sal = (re.search(r'(.\d+,\d+).*', yearly_salary).group(1))
     if sal[0] == '$':
         salaries.append({'city': city['city'], 'currency': 'dollar', 'salary': int(sal[1:].replace(',', ''))})
     elif sal[0] == u'\u20AC':
